@@ -1,5 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
+#[derive(Clone, Eq, PartialEq)]
 struct Event {
   pub name: String,
   pub month: u8,
@@ -17,15 +18,20 @@ impl Event {
   }
 
   /* This function checks if two events are one the same date */
-  pub fn has_conflict() {
+  pub fn has_conflict(&self, other_event: & Event) -> bool {
+        self.month == other_event.month &&
+        self.day == other_event.day &&
+        self.year == other_event.year
     // Your code!
   }
 
   /* This function shifts the date of an event by one day.
    * You can assume that the date is not on the last day
    * of a month */
-  pub fn update_event() {
+  pub fn update_event(&mut self) {
     // Your code!
+    self.day = self.day + 1
+
   }
 }
 
@@ -45,15 +51,53 @@ struct Trie {
 
 impl Trie {
   pub fn new(strs: Vec<&str>) -> Trie {
-    Trie::build(strs, '\0')
+    Trie::build(strs)
   }
 
-  fn build(strs: Vec<&str>, chr: char) -> Trie {
-    unimplemented!()
+
+  fn build(strs: Vec<&str>) -> Trie {
+    // convert all the strs into strings
+    // use a hashmap to group all the string together based on the first character
+    // for each grouppin
+    // Have an index pointing to where should
+    // Any of the last character of any element equals to char
+
+    let mut children = Vec::new();
+
+    for str in strs {
+      let init = (&children, str.len() );
+      let result: (&Vec<Trie>, usize) = str.chars()
+          .fold(init,
+                |(children, remaining_chars), chr| {
+        let mut new_node = match children.iter().find(|trie| {
+          let trie = *trie;
+          trie.chr == chr
+      }) {
+        Some(trie) => trie,
+        None => &(Trie { chr, has: false, children: Vec::new() })
+      };
+      if remaining_chars == 1 {
+        new_node.has = true
+      };
+        (&new_node.children, remaining_chars - 1)
+    });
+      ()
+    };
+
+    Trie {chr :'\0', has: false, children}
+
   }
 
   pub fn contains(&self, s: &str) -> bool {
-    unimplemented!()
+    if s.len() == 0 {
+      self.has
+    } else {
+      self.children.iter().find(|child| {
+        child.chr == s.chars().next().unwrap()
+      }).map(|child| {
+        child.contains(&s[1..])
+      }).is_some()
+    }
   }
 }
 
@@ -73,6 +117,7 @@ mod test {
 
   #[test]
   fn test_trie() {
+//    "hello".get(10)
     let trie = Trie::new(vec!["b", "ab"]);
     assert_eq!(trie.contains("ab"), true);
     assert_eq!(trie.contains("ac"), false);

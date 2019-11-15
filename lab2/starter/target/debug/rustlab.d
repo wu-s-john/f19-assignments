@@ -1,0 +1,1 @@
+/Users/johnwu/code/rust/f19-assignments/lab2/starter/target/debug/rustlab: /Users/johnwu/code/rust/f19-assignments/lab2/starter/src/main.rs /Users/johnwu/code/rust/f19-assignments/lab2/starter/src/part1.rs

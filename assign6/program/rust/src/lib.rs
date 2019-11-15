@@ -7,23 +7,82 @@ pub enum BinaryTree<T> {
   Node(T, Box<BinaryTree<T>>, Box<BinaryTree<T>>)
 }
 
+
+
 impl<T: Debug + Display + PartialOrd> BinaryTree<T> {
   pub fn len(&self) -> usize {
-    unimplemented!()
+    match self {
+      BinaryTree::Leaf => {0}
+      BinaryTree::Node(_t, l, r) => {
+        1 + l.len() + r.len()
+      }
+    }
   }
 
   pub fn to_vec(&self) -> Vec<&T> {
-    unimplemented!()
+    match self {
+      BinaryTree::Leaf => {Vec::new()}
+      BinaryTree::Node(t, l, r) => {
+        let left_vector = l.to_vec();
+        let right_vector = r.to_vec();
+        let mut result = Vec::new();
+        left_vector.iter().for_each(|elem| {
+          result.push(*elem)
+        });
+        result.push(t);
+        right_vector.iter().for_each(|elem| {
+          result.push(*elem)
+        });
+        result
+      }
+    }
   }
+
 
   pub fn sorted(&self) -> bool {
-    unimplemented!()
+    let vector = self.to_vec();
+    match vector.first() {
+      Option::None => {true}
+      Option::Some(head) => {
+        let mut iter_value = head;
+        let mut should_continue = true;
+        vector .iter().for_each(|value | {
+          if should_continue {
+            if iter_value > value {
+              let should_continue = false;
+            }  else {
+              let iter_value = value;
+            }
+          }
+
+        });
+        return true
+      }
+
+    }
+
   }
+
+
+
+
+
 
   pub fn insert(&mut self, t: T) {
-    unimplemented!()
+    match self {
+      BinaryTree::Leaf =>  (*self =  BinaryTree::Node(t, Box::new(BinaryTree::Leaf), Box::new(BinaryTree::Leaf))),
+      BinaryTree::Node(current_t, left, right) =>
+        if *current_t < t {
+          right.insert(t)
+        } else {
+          left.insert(t)
+        }
+
+
+    }
   }
 
+//  This function returns the smallest element greater than or equal to the query element. If no such element exists, then return None.
   pub fn search(&self, query: &T) -> Option<&T> {
     unimplemented!()
   }
@@ -91,6 +150,8 @@ mod test {
         Box::new(Node("C", Box::new(Leaf), Box::new(Leaf))))
     };
   }
+
+
 
   #[test]
   fn len_test() {

@@ -1,5 +1,6 @@
 use std::{ptr, io};
-use std::collections::HashSet;
+use std::collections::{HashSet};
+
 
 fn password_checker(s: String) {
   let mut guesses = 0;
@@ -10,20 +11,48 @@ fn password_checker(s: String) {
 
     // If the buffer is "Password1" then print "You guessed it!" and return,
     // otherwise print the number of guesses so far.
-    unimplemented!()
+    println!("buffer contents {}", &buffer);
+    if &buffer[0..buffer.len() -1] == &s {
+      println!("You guessed it!");
+      return;
+    } else {
+      println!("Try again! you have {} guess", guesses);
+      guesses = guesses + 1
+    }
   }
 }
 
 fn add_n(v: Vec<i32>, n: i32) -> Vec<i32> {
-  unimplemented!()
+  v.iter().map(|x| {x + n}).collect()
 }
 
 fn add_n_inplace(v: &mut Vec<i32>, n: i32) {
-  unimplemented!()
+  for elem in v {
+    *elem = *elem + n
+  }
+
 }
 
 fn dedup(v: &mut Vec<i32>) {
-  unimplemented!()
+  let mut hash_set  = HashSet::new();
+  let mut duplicated_indices = Vec::new();
+
+  for index in 1..(v.len()) {
+    let value = v[index];
+    if hash_set.contains( &value) {
+      duplicated_indices.push(index)
+    } else {
+      hash_set.insert(value);
+      ()
+    }
+  }
+
+  duplicated_indices.reverse();
+  duplicated_indices.iter().for_each(|value| {println!("Duplicated indices: {}", value)} );
+  duplicated_indices.iter().for_each(|index| {
+    v.remove(*index);
+    ()
+  } )
 }
 
 #[cfg(test)]
@@ -32,7 +61,7 @@ mod test {
 
   #[test]
   fn test_password_checker() {
-    //password_checker(String::from("Password1"));
+    password_checker(String::from("Password1"));
   }
 
   #[test]
