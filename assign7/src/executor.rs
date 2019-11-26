@@ -2,6 +2,7 @@ use std::mem;
 use std::sync::{mpsc, Mutex, Arc};
 use std::thread;
 use future::{Future, Poll};
+use std::thread::JoinHandle;
 
 /*
  * Core executor interface.
@@ -62,11 +63,31 @@ impl Executor for SingleThreadExecutor {
   where
     F: Future<Item = ()> + 'static,
   {
-    unimplemented!()
+    match f.poll() {
+      Poll::Ready(_) => (),
+      Poll::NotReady => self.futures.push(
+        Box::new(f)
+      )
+    }
   }
 
   fn wait(&mut self) {
-    unimplemented!()
+    while not (self.futures.is_empty()) {
+      let mut result_vector = vec![];
+      for (i, future) in self.futures.iter_mut().enumerate() {
+        match future.poll() {
+          Poll::Ready(_) => (),
+          Poll::NotReady => result_vector.push(i)
+        }
+      }
+      result_vector.reverse();
+      for i in result_vector {
+        self.futures.remove(i);
+        ()
+      }
+    }
+
+
   }
 }
 
@@ -77,7 +98,19 @@ pub struct MultiThreadExecutor {
 
 impl MultiThreadExecutor {
   pub fn new(num_threads: i32) -> MultiThreadExecutor {
-    unimplemented!()
+    let threads = vec![];
+    let (sender, receiver )= mpsc::channel();
+
+    let iter = (0..num_threads);
+
+    for i in (0..num_threads) {
+      let thread = thread::spawn(|| {
+          let mut single_thread = SingleThreadExecutor::new();
+          single_thread.wait()
+      });
+
+      threads.push(thread.)
+    }
   }
 }
 
@@ -86,10 +119,13 @@ impl Executor for MultiThreadExecutor {
   where
     F: Future<Item = ()> + 'static,
   {
-    unimplemented!()
+    self.sender.send( f).unwrap();
   }
 
   fn wait(&mut self) {
-    unimplemented!()
+    for thread in self.threads {
+      thread.join().unwrap();
+    }
+
   }
 }

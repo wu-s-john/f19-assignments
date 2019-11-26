@@ -49,7 +49,7 @@ impl<T: Debug + Display + PartialOrd> BinaryTree<T> {
         vector .iter().for_each(|value | {
           if should_continue {
             if iter_value > value {
-              let should_continue = false;
+               should_continue = false;
             }  else {
               let iter_value = value;
             }
@@ -83,8 +83,21 @@ impl<T: Debug + Display + PartialOrd> BinaryTree<T> {
   }
 
 //  This function returns the smallest element greater than or equal to the query element. If no such element exists, then return None.
+  fn search_helper<'a>(&self, query: &T, sub_result: &'a Option<&T>) -> &'a Option<&T> {
+    match self {
+        BinaryTree::Leaf => {sub_result}
+        BinaryTree::Node(other, left, right) => {
+          if other >= query {
+            left.search_helper(query, &Some(other))
+          } else {
+            right.search_helper(query, sub_result)
+          }
+        }
+    }
+  }
+
   pub fn search(&self, query: &T) -> Option<&T> {
-    unimplemented!()
+    self.search_helper(query, None)
   }
 
   pub fn rebalance(&mut self) {

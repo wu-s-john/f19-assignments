@@ -1,4 +1,13 @@
+#![feature(core_intrinsics)]
 use take_mut;
+use std::intrinsics::{uninit, unreachable};
+use std::mem;
+use std::borrow::Borrow;
+use core::intrinsics;
+use std::ops::Deref;
+use proc_macro::Spacing::Joint;
+use std::mem::take;
+use future::Join::Done;
 
 /*
  * Core futures interface.
@@ -122,8 +131,70 @@ where
 {
   type Item = (F::Item, G::Item);
 
+
   fn poll(&mut self) -> Poll<Self::Item> {
-    unimplemented!()
+    match self {
+      Join::BothRunning(future1, future2_mut) => {
+        match (future1.poll(), future2_mut.poll()) {
+          (Poll::NotReady, Poll::NotReady)  => Poll::NotReady,
+          (Poll::Ready(completed1), Poll::NotReady) => {
+            take_mut::take(self, |join| {
+              match join {
+                Join::BothRunning(future1, future2) => {
+                  Join::FirstDone(completed1, future2)
+                },
+                _ => unreachable!()
+              }
+            });
+            Poll::NotReady
+          }
+          (Poll::NotReady, Poll::Ready(completed2)) => {
+            take_mut::take(self, |join| {
+              match join {
+                Join::BothRunning(future1, future2) => {
+                  Join::SecondDone(future1, completed2)
+                },
+                _ => unreachable!()
+              }
+            });
+            Poll::NotReady
+          },
+          (Poll::Ready(completed1), Poll::Ready(completed2)) => {
+            *self = Join::Done;
+            Poll::Ready ((completed1, completed2))
+          }
+        }
+      },
+      Join::SecondDone(future, completed_mut) => {
+        let mut result= Poll::NotReady;
+        match future.poll() {
+          Poll::NotReady => Poll::NotReady,
+          Poll::Ready(first_completed) => {
+            let old_join = mem::replace(self, Join::Done);
+            match old_join {
+              Join::SecondDone(_, second_completed) => Poll::Ready( (first_completed, second_completed)),
+              _ => Poll::NotReady
+            }
+          }
+        };
+        result
+      },
+      Join::FirstDone(first_completed_mut, future) => {
+        let mut result : Poll<Self::Item> = Poll::NotReady;
+        match future.poll() {
+          Poll::NotReady => Poll::NotReady,
+          Poll::Ready(second_completed) => {
+            let old_join= mem::replace(self, Join::Done);
+            match old_join {
+              Join::FirstDone(first_completed, _) => Poll::Ready( (first_completed, second_completed)),
+              _ => Poll::NotReady
+            }
+          }
+        };
+        result
+      },
+      Join::Done => unreachable!("Should not reach here when done")
+    }
   }
 }
 
@@ -157,6 +228,28 @@ where
   type Item = Fut2::Item;
 
   fn poll(&mut self) -> Poll<Self::Item> {
-    unimplemented!()
+    match self {
+      AndThen::Second(completed_future) =>
+        completed_future.poll(),
+      AndThen::First(future, f_mut) => {
+        match future.poll() {
+            Poll::NotReady => Poll::NotReady,
+            Poll::Ready(ready_value) => {
+              take_mut::take(self, |value| {
+                match value {
+                  AndThen::First(_, f) =>
+                  AndThen::Second(f (ready_value)),
+                  _ => unreachable!()
+                }
+              });
+              Poll::NotReady
+
+          }
+        }
+      },
+      AndThen::Done =>
+        unimplemented!()
+
+    }
   }
 }

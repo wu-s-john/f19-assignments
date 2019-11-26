@@ -6,13 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2f4aa9df-3adc-42f6-89ae-e68e46bf1039" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../../assign6/program/rust/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../../assign6/program/rust/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../starter/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../starter/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../starter/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../starter/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../starter/src/part1.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../starter/src/part1.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../starter/src/part2.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../starter/src/part2.rs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -60,8 +53,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/part2.rs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="65" column="32" selection-start-line="65" selection-start-column="32" selection-end-line="65" selection-end-column="32" />
+            <state relative-caret-position="1125">
+              <caret line="79" column="3" lean-forward="true" selection-start-line="79" selection-start-column="3" selection-end-line="79" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -91,11 +84,11 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="34" />
-    <option name="y" value="23" />
-    <option name="width" value="1038" />
-    <option name="height" value="970" />
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="x" value="1680" />
+    <option name="y" value="-667" />
+    <option name="width" value="2560" />
+    <option name="height" value="1440" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -177,10 +170,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="34" y="23" width="1038" height="970" extended-state="0" />
+    <frame x="1680" y="-667" width="2560" height="1440" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.030120483" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.011914218" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="aws.explorer" order="3" side_tool="true" />
@@ -237,8 +230,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/part2.rs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="65" column="32" selection-start-line="65" selection-start-column="32" selection-end-line="65" selection-end-column="32" />
+        <state relative-caret-position="1125">
+          <caret line="79" column="3" lean-forward="true" selection-start-line="79" selection-start-column="3" selection-end-line="79" selection-end-column="3" />
         </state>
       </provider>
     </entry>
